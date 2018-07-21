@@ -18,8 +18,18 @@ doc.xpath('//li[@class="mdTopMTMList01Item"]').each do |node|
   p node.css('h3').inner_text
 
   # 記事のサムネイル画像
-  p node.css('img').attribute('src').value
+  image = node.css('img').attribute('src').value
+  p image
 
   # 記事のリンク
-  p node.css('a').attribute('href').value
+  href = node.css('a').attribute('href').value
+
+  # サムネを保存する
+  open(image) { |image|
+   File.open("./img/#{href.split("/").last}.jpg","wb") do |file|
+    file.puts image.read
+   end
+  }
+
+
 end
