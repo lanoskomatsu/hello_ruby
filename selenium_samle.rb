@@ -27,7 +27,6 @@ while 1 do
       element.click
     end
   rescue => e
-    puts e
     break_count += 1
     break if break_count == 5
   end
