@@ -17,11 +17,10 @@ break_count = 0
 while 1 do
   # javascriptを実行してページの最下部へ移動
   driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-
   sleep 3
 
-  # "結果をもっと表示"ボタンの検出
   begin
+    # "結果をもっと表示"ボタンの検出
     if driver.find_element(:id, "smb").size != 0
       element = driver.find_element(:id, "smb")
       element.click
