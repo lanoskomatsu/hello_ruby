@@ -13,7 +13,27 @@ element.send_keys('エンジニアブーツ redwing')
 element = driver.find_element(:name, 'btnG')
 element.click
 
-element = driver.find_element(:class, 'irc_mi')
+break_count = 0
+while 1 do
+  # javascriptを実行してページの最下部へ移動
+  driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+
+  sleep 3
+
+  # "結果をもっと表示"ボタンの検出
+  begin
+    if driver.find_element(:id, "smb").size != 0
+      p "class: 'ksb' Click!!!"
+      element = driver.find_element(:id, "smb")
+      element.click
+    end
+  rescue => e
+    puts e
+    break_count += 1
+    p "break_count: #{break_count}"
+    break if break_count == 5
+  end
+end
 
 # ブラウザを閉じる
 driver.quit
