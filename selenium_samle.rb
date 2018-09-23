@@ -23,14 +23,12 @@ while 1 do
   # "結果をもっと表示"ボタンの検出
   begin
     if driver.find_element(:id, "smb").size != 0
-      p "class: 'ksb' Click!!!"
       element = driver.find_element(:id, "smb")
       element.click
     end
   rescue => e
     puts e
     break_count += 1
-    p "break_count: #{break_count}"
     break if break_count == 5
   end
 end
