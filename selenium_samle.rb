@@ -13,5 +13,7 @@ element.send_keys('エンジニアブーツ redwing')
 element = driver.find_element(:name, 'btnG')
 element.click
 
+element = driver.find_element(:class, 'irc_mi')
+
 # ブラウザを閉じる
 driver.quit
