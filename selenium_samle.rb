@@ -42,5 +42,19 @@ pp images = elements.map{|e|
   href if href&.match(/imgres/)
 }.compact; nil
 
+# imagesをループして画像の参照元URLを取得する
+image_urls = images.map{|i|
+  # URLにジャンプ
+  pp "jump to #{i}"
+  driver.navigate.to i
+  sleep 1
+  elements = driver.find_elements(:class, "irc_mi")
+
+  # elementsの中から画像を探す
+  elements.map{|e|
+    e.attribute('src')
+  }.compact[0]
+}
+
 # ブラウザを閉じる
 driver.quit
