@@ -34,9 +34,13 @@ while 1 do
 end
 
 # id: "search" を探す
-elements = driver.find_element(:id, "search").find_elements(:tag_name, "img")
+elements = driver.find_element(:id, "search").find_elements(:tag_name, "a")
 
-pp elements.map{|e| e.attribute('src')}
+# elementからaタグを取得して画像のリンクをまとめる
+pp images = elements.map{|e|
+  href = e.attribute('href')
+  href if href&.match(/imgres/)
+}.compact; nil
 
 # ブラウザを閉じる
 driver.quit
