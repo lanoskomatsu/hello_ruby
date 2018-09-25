@@ -56,5 +56,13 @@ image_urls = images.map{|i|
   }.compact[0]
 }
 
+text = image_urls.map{|i|
+  "<img src='#{i}'>"
+}
+
+File.open("boots.html", "w") do |f|
+  text.each { |t| f.puts(t) }
+end
+
 # ブラウザを閉じる
 driver.quit
