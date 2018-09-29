@@ -42,9 +42,9 @@ urls.each{|url|
             out.write(file.read)
           end
         end
-      rescue
+      rescue => e
         # 何もしない
-        pp "ERROR: #{image_url}"
+        pp "ERROR: image_url: #{image_url}, image: #{img}, message: #{e.message}"
       end
     }
   }
