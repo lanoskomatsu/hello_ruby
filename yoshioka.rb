@@ -6,8 +6,8 @@ require 'pp'
 NAVER_DOMAIN = "https://matome.naver.jp"
 SEARCH_QUERY = "/search?q=%E5%90%89%E5%B2%A1%E9%87%8C%E5%B8%86"
 url = NAVER_DOMAIN + SEARCH_QUERY
+
 dirname = "yoshioka_riho"
-# dirname = "yoga_pants"
 FileUtils.mkdir_p(dirname) unless FileTest.exist?(dirname)
 
 urls = []
@@ -31,9 +31,9 @@ urls.each{|url|
     image_urls = html.css('.mdMTMWidget01ItemImg01 a').map{|a| a[:href]}.map{|a| NAVER_DOMAIN + a}
 
     image_urls.map{|image_url|
-      html = Nokogiri::HTML(open(image_url))
-      img = html.css('.mdMTMEnd01Item01 a').map{|a| a[:href]}.last
       begin
+        html = Nokogiri::HTML(open(image_url))
+        img = html.css('.mdMTMEnd01Item01 a').map{|a| a[:href]}.last
         open(img) do |file|
           filename = img.split("/").last
           path = "./#{dirname}/#{filename}"
@@ -44,9 +44,10 @@ urls.each{|url|
         end
       rescue
         # 何もしない
+        pp "ERROR: #{image_url}"
       end
-      sleep 1
     }
   }
   pp "クロール完了 url: #{url}"
+  sleep 1
 }
