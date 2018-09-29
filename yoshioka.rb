@@ -16,29 +16,37 @@ urls.concat html.css('.mdSR01Main01 a').map{|a| a[:href]}.map{|a| a if a.match(%
 pp "urls: #{urls}"
 
 urls.each{|url|
-  pp "クロール開始 url: #{url}"
   html = Nokogiri::HTML(open(url))
 
-  image_urls = html.css('.mdMTMWidget01ItemImg01 a').map{|a| a[:href]}.map{|a| NAVER_DOMAIN + a}
+  # ページリストを作成
+  last_page = html.css('.MdPagination03 a').map{|a| a[:href]}.count + 1
+  pages = (1..last_page).map{|i| url + "?&page=#{i}"}
+  pp "pages: #{pages}"
 
-  image_urls.map{|image_url|
-    html = Nokogiri::HTML(open(image_url))
-    img = html.css('.mdMTMEnd01Item01 a').map{|a| a[:href]}.last
-    begin
-      open(img) do |file|
-        filename = img.split("/").last
-        path = "./#{dirname}/#{filename}"
-        open(path, "w+b") do |out|
-          out.write(file.read)
+  pages.each{|page|
+    pp "クロール開始 url: #{page}"
+    # 1ページ以降の場合はページを開く
+    html = Nokogiri::HTML(open(page)) if page.split("page=").last.to_i > 1
+
+    image_urls = html.css('.mdMTMWidget01ItemImg01 a').map{|a| a[:href]}.map{|a| NAVER_DOMAIN + a}
+
+    image_urls.map{|image_url|
+      html = Nokogiri::HTML(open(image_url))
+      img = html.css('.mdMTMEnd01Item01 a').map{|a| a[:href]}.last
+      begin
+        open(img) do |file|
+          filename = img.split("/").last
+          path = "./#{dirname}/#{filename}"
+          open(path, "w+b") do |out|
+            pp "filename: #{filename}"
+            out.write(file.read)
+          end
         end
+      rescue
+        # 何もしない
       end
-    rescue
-      # 何もしない
-    end
-    sleep 1
-    pp "クロール完了 url: #{url}"
-    last_page = html.css('.MdPagination03 a').map{|a| a[:href]}.count + 1
-    # 最後のページをクロールしたか判定
-    next if url.splt("page=").last.to_i == last_page
+      sleep 1
+    }
   }
+  pp "クロール完了 url: #{url}"
 }
