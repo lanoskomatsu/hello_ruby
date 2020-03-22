@@ -23,3 +23,12 @@ print("classification report")
 print(metrics.classification_report(y_test, predicted))
 print("confusion matrix")
 print(metrics.confusion_matrix(y_test, predicted))
+
+imgs_yt_preds = list(zip(digits.images[n_train:], y_test, predicted))
+for index, (image, y_t, pred) in enumerate(imgs_yt_preds[404:416]) :
+    plt.subplot(3, 4, index + 1)
+    plt.axis("off")
+    plt.tight_layout()
+    plt.imshow(image, cmap="Greys", interpolation="nearest")
+    plt.title(f"t: {y_t} pre: {pred}", fontsize=12)
+plt.show()
