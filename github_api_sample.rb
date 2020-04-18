@@ -10,6 +10,7 @@ class Request
   end
 
   def http_request
+    pp "request url: #{url}"
     uri = URI.parse(url)
     http = Net::HTTP.new(uri.hostname, uri.port)
     http.use_ssl = (uri.scheme == 'https')
@@ -17,18 +18,27 @@ class Request
     http.request(req)
   end
 
+  def get_repo_names
+    res = http_request
+    next_url = res.header["link"].scan(/\<([^<>]+)\>; rel\="next"/)[0]&.first
+    pp "next_url: #{next_url}"
+    names = JSON.parse(res.body).map{|a| a["name"]}
+    pp "names: #{names}"
+    { next: next_url, repo_names: names }
+  end
+
   def repos
     repos = []
-    res = http_request
-    repos.concat(JSON.parse(res.body).map{|a| a["name"]})
-    next_url = true
 
-    while next_url
-      next_url = res.header["link"].scan(/\<([^<>]+)\>; rel\="next"/)[0]
-      next_url&.each{|url|
-        res = Request.new(url).http_request
-        repos.concat(JSON.parse(res.body).map{|a| a["name"]})
-      }
+    while url
+      res = get_repo_names
+      pp "res: #{res}"
+      repos.concat(res[:repo_names])
+      @url = res[:next]
+      pp "#######################"
+      pp "#{url}"
+      pp "#{@url}"
+      pp "#######################"
     end
 
     repos
