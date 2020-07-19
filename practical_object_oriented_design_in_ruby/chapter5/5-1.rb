@@ -3,23 +3,15 @@ class Trirp
 
   def prepare(prepares)
     prepares.each{|prepare|
-      case prepare
-      when Mechanic
-        prepare.prepare_bicycles(bicycles)
-      when TripCordinator
-        prepare.buy_food(customers)
-      when Driver
-        prepare.gas_up(vehicle)
-        prepare.fill_water_tank(vehicle)
-      end
+      prepare.prepare_trip(self)
     }
   end
   #...
 end
 
 class Mechanic
-  def prepare_bicycles(bicycles)
-    bicycles.each{|bicycle| prepare_bicycle(bocycle) }
+  def prepare_trip(trip)
+    trip.bicycles.each{|bicycle| prepare_bicycle(bocycle) }
   end
 
   def prepare_bicycle(bicycles)
@@ -28,12 +20,22 @@ class Mechanic
 end
 
 class TripCordinator
+  def prepare_trip(trip)
+    buy_food(trip.customers)
+  end
+
   def buy_food(customers)
     #...
   end
 end
 
 class Driver
+  def prepare_trip(trip)
+    vehicle = trip.vehicle
+    gas_up(vehicle)
+    fill_water_tank(vehicle)
+  end
+  
   def gas_up(vehicle)
     #...
   end
