@@ -19,5 +19,4 @@ end
 
 bike = Bicycle.new(size: 'M', tape_color: 'red')
 
-p bike.size
-p bike.spares
+p bike.size, bike.spares
