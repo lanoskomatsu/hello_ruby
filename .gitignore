@@ -1,0 +1,6 @@
+./hanami_sample/bookshelf/db/*.sqlite
+./hanami_sample/bookshelf/public/assets*
+./hanami_sample/bookshelf/tmp
+./hanami_sample/bookshelf/env.local
+./hanami_sample/bookshelf/env.*.local
+
